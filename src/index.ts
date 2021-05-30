@@ -93,9 +93,8 @@ const commands = {
 
     const matchClear = message.match(/^!status\s+clear\s*$/);
     if (matchClear) {
-      return "Can\u2019t clear status right now, sorry";
-      //client.user.setActivity();
-      //return true;
+      client.user.setPresence({ activities: [] });
+      return true;
     }
 
     const match = message.match(/^!status\s+(playing|watching|listening)\s+(\S.*)$/);
