@@ -1,0 +1,25 @@
+{
+  "name": "discord-dicebot",
+  "version": "1.0.0",
+  "description": "A Discord bot for rolling dice.",
+  "main": "index.js",
+  "author": "Jeremias Pettinen <hi@jeremi.as>",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "build": "pnpx tsc",
+    "start": "node build"
+  },
+  "dependencies": {
+    "discord.js": "github:discordjs/discord.js#e300518597955abf4bf3c3d2634b47b9b3964274"
+  },
+  "devDependencies": {
+    "@types/node": "^15.6.1",
+    "@types/ws": "^7.4.4",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
+    "discord-api-types": "^0.18.1",
+    "eslint": "^7.27.0",
+    "typescript": "^4.3.2"
+  }
+}
