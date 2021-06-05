@@ -11,15 +11,15 @@
     "start": "node build"
   },
   "dependencies": {
-    "discord.js": "github:discordjs/discord.js#e300518597955abf4bf3c3d2634b47b9b3964274"
+    "discord.js": "github:discordjs/discord.js#2901fd595be847a0e6c86155b3229d3341cfad32"
   },
   "devDependencies": {
-    "@types/node": "^15.6.1",
+    "@types/node": "^15.12.1",
     "@types/ws": "^7.4.4",
-    "@typescript-eslint/eslint-plugin": "^4.25.0",
-    "@typescript-eslint/parser": "^4.25.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
     "discord-api-types": "^0.18.1",
-    "eslint": "^7.27.0",
+    "eslint": "^7.28.0",
     "typescript": "^4.3.2"
   }
 }
