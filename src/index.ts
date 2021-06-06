@@ -23,7 +23,7 @@ const client = new Client({
 const commands = {
   dice(message: string) {
     const parseRoll = function(rollString: string) {
-      const match = rollString.match(/^(\d+)?d(\d+)$/);
+      const match = /^(\d+)?d(\d+)$/.exec(rollString);
       if (match === null)
         return false;
 
@@ -64,7 +64,7 @@ const commands = {
     if (message.startsWith('!'))
       message = message.substr(1);
 
-    while ((match = message.match(regex)) !== null) {
+    while ((match = regex.exec(message)) !== null) {
       if (count >= config.dice.maxRolls) {
         rolls.push(`I can\u2019t remember more than ${config.dice.maxRolls} rolls at a time!`);
         break;
@@ -74,7 +74,7 @@ const commands = {
         rolls.push(roll);
       message = message.substr(match[1].length);
       if (message.startsWith('+')) {
-        if (message.substr(1).match(regex) === null)
+        if (regex.exec(message.substr(1)) === null)
           return null;
         message = message.substr(1);
       }
@@ -88,16 +88,16 @@ const commands = {
       return `Rolls:\n${rolls.join('\n')}`;
   },
   status(message: string) {
-    if (!client.user || !message.match(/^!status\b/))
+    if (!client.user || !/^!status\b/.exec(message))
       return false;
 
-    const matchClear = message.match(/^!status\s+clear\s*$/);
+    const matchClear = /^!status\s+clear\s*$/.exec(message);
     if (matchClear) {
       client.user.setPresence({ activities: [] });
       return true;
     }
 
-    const match = message.match(/^!status\s+(playing|watching|listening)\s+(\S.*)$/);
+    const match = /^!status\s+(playing|watching|listening)\s+(\S.*)$/.exec(message);
     if (!match)
       return "Correct format: `!status [ clear | [ playing | watching | listening ] whatever ]`";
     if (match[2].length > config.status.maxLength)
@@ -127,4 +127,4 @@ client.on('message', async message => {
   }
 });
 
-client.login();
+await client.login();

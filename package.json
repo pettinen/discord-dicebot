@@ -7,11 +7,12 @@
   "license": "ISC",
   "type": "module",
   "scripts": {
-    "build": "pnpx tsc",
+    "build": "tsc",
+    "lint": "eslint src",
     "start": "node build"
   },
   "dependencies": {
-    "discord.js": "github:discordjs/discord.js#2901fd595be847a0e6c86155b3229d3341cfad32"
+    "discord.js": "github:discordjs/discord.js#dec191aa1e4f22690285ca06c6eee7e6086b2930"
   },
   "devDependencies": {
     "@types/node": "^15.12.1",
