@@ -1,6 +1,6 @@
-import { randomInt } from 'crypto';
+import {randomInt} from "crypto";
 
-import { Client, Constants, Intents } from 'discord.js';
+import {Client, Constants, Intents} from "discord.js";
 
 
 const config = {
@@ -8,24 +8,24 @@ const config = {
     maxCount: 99,
     minSides: 2,
     maxSides: 9999,
-    maxRolls: 5
+    maxRolls: 5,
   },
   status: {
-    maxLength: 20
-  }
+    maxLength: 20,
+  },
 };
 
 const client = new Client({
-  allowedMentions: { repliedUser: false },
-  intents: Intents.NON_PRIVILEGED
+  allowedMentions: {repliedUser: false},
+  intents: Intents.NON_PRIVILEGED,
 });
 
 const commands = {
-  dice(message: string) {
-    const parseRoll = function(rollString: string) {
-      const match = /^(\d+)?d(\d+)$/.exec(rollString);
+  dice(message: string): string | boolean {
+    const parseRoll = function(rollString: string): string | null {
+      const match = /^(\d+)?d(\d+)$/u.exec(rollString);
       if (match === null)
-        return false;
+        return null;
 
       let diceCount = Number(match[1]);
       const dieSides = Number(match[2]);
@@ -33,11 +33,11 @@ const commands = {
       if (Number.isNaN(diceCount))
         diceCount = 1;
       else if (diceCount < 1 || diceCount > config.dice.maxCount)
-        return false;
+        return null;
       if (Number.isNaN(dieSides)
           || dieSides < config.dice.minSides
           || dieSides > config.dice.maxSides)
-        return false;
+        return null;
 
       const rolls = [];
       let total = 0;
@@ -47,21 +47,21 @@ const commands = {
         total += roll;
       }
 
-      let meme = '';
-      if (rollString === '2d6' && total === 2)
-        meme = ' :snake::eyes:';
+      let meme = "";
+      if (rollString === "2d6" && total === 2)
+        meme = " :snake::eyes:";
 
       if (diceCount > 1)
-        return `${rollString}: ${rolls.join(' + ')} = **${total}**${meme}`;
+        return `${rollString}: ${rolls.join(" + ")} = **${total}**${meme}`;
       else
         return `${rollString}: **${total}**${meme}`;
     };
 
-    const regex = /^((\d+)?d\d+)($|\s|\+)/;
+    const regex = /^((\d+)?d\d+)($|\s|\+)/u;
     const rolls = [];
     let match, count = 0;
 
-    if (message.startsWith('!'))
+    if (message.startsWith("!"))
       message = message.substr(1);
 
     while ((match = regex.exec(message)) !== null) {
@@ -73,9 +73,9 @@ const commands = {
       if (roll !== null)
         rolls.push(roll);
       message = message.substr(match[1].length);
-      if (message.startsWith('+')) {
+      if (message.startsWith("+")) {
         if (regex.exec(message.substr(1)) === null)
-          return null;
+          return true;
         message = message.substr(1);
       }
       ++count;
@@ -85,40 +85,40 @@ const commands = {
     else if (rolls.length === 1)
       return rolls[0];
     else
-      return `Rolls:\n${rolls.join('\n')}`;
+      return `Rolls:\n${rolls.join("\n")}`;
   },
-  status(message: string) {
-    if (!client.user || !/^!status\b/.exec(message))
+  status(message: string): string | boolean {
+    if (!client.user || !/^!status\b/u.exec(message))
       return false;
 
-    const matchClear = /^!status\s+clear\s*$/.exec(message);
+    const matchClear = /^!status\s+clear\s*$/u.exec(message);
     if (matchClear) {
-      client.user.setPresence({ activities: [] });
+      client.user.setPresence({activities: []});
       return true;
     }
 
-    const match = /^!status\s+(playing|watching|listening)\s+(\S.*)$/.exec(message);
+    const match = /^!status\s+(playing|watching|listening)\s+(\S.*)$/u.exec(message);
     if (!match)
       return "Correct format: `!status [ clear | [ playing | watching | listening ] whatever ]`";
     if (match[2].length > config.status.maxLength)
       return `Subject cannot be over ${config.status.maxLength} characters long.`;
     const type = (Constants.ActivityTypes as string[]).indexOf(match[1].toUpperCase());
-    client.user.setActivity(match[2], { type });
+    client.user.setActivity(match[2], {type});
     return true;
-  }
+  },
 };
 
-client.on('message', async message => {
+client.on("message", async message => {
   if (message.author.bot)
     return;
 
   for (const command of Object.values(commands)) {
     const reply = command(message.content);
     if (reply) {
-      if (typeof reply === 'string') {
+      if (typeof reply === "string") {
         try {
           await message.reply(reply);
-        } catch (error) {
+        } catch (error: unknown) {
           console.log(error);
         }
       }
