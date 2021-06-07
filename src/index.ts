@@ -127,4 +127,4 @@ client.on("message", async message => {
   }
 });
 
-await client.login();
+client.login().catch(console.log);
