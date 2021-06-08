@@ -109,11 +109,16 @@ const commands = {
 };
 
 client.on("message", async message => {
-  if (message.author.bot)
+  if (message.author.bot || !client.user)
     return;
 
+  const botMention = `<@!${client.user.id}>`;
+  let content = message.content.trim();
+  if (content.startsWith(botMention))
+    content = content.slice(botMention.length).trim();
+
   for (const command of Object.values(commands)) {
-    const reply = command(message.content);
+    const reply = command(content);
     if (reply) {
       if (typeof reply === "string") {
         try {
